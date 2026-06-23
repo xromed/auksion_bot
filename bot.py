@@ -15,8 +15,6 @@ from google.oauth2.service_account import Credentials
 # ============================================================
 #  НАСТРОЙКИ
 # ============================================================
-TELEGRAM_TOKEN    = os.environ.get("TELEGRAM_TOKEN", "ВСТАВЬ_ТОКЕН_БОТА_СЮДА")
-TELEGRAM_CHAT_ID  = os.environ.get("TELEGRAM_CHAT_ID", "1295673436")
 GOOGLE_CREDS_FILE = os.environ.get("GOOGLE_CREDS_FILE", "google_creds.json")
 GOOGLE_SHEET_NAME = "E-Auksion Лоты"
 REPORT_TIME       = "10:00"
@@ -447,27 +445,6 @@ def fetch_lots(group_id: int) -> list:
         page += 1
         time.sleep(0.5)
     return all_lots
-
-
-# ──────────────────────────────────────────────
-#  TELEGRAM
-# ──────────────────────────────────────────────
-
-def send_telegram(text: str):
-    if not TELEGRAM_TOKEN or TELEGRAM_TOKEN == "ВСТАВЬ_ТОКЕН_БОТА_СЮДА":
-        print("  [Telegram] Токен не настроен, пропускаю")
-        return
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    try:
-        r = requests.post(url, json={
-            "chat_id": TELEGRAM_CHAT_ID,
-            "text": text,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        }, timeout=15)
-        r.raise_for_status()
-    except Exception as e:
-        print(f"  [ОШИБКА] Telegram: {e}")
 
 
 # ──────────────────────────────────────────────
@@ -908,29 +885,8 @@ def check_and_notify():
     save_lots_data(lots_data)
     update_history(new_counts)
 
-    # Сводка в Telegram
     total_new = sum(v["new"] for v in summary.values())
-    lines = [
-        f"📊 <b>Сводка e-auksion.uz — {today}</b>",
-        f"💱 Курс ЦБ: <b>1 USD = {usd_rate:,.0f} сум</b>",
-        "",
-    ]
-    for label, s in summary.items():
-        lines.append(f"{label}")
-        lines.append(f"  🆕 Новых: <b>{s['new']}</b>")
-        lines.append(f"  ✅ Активных: {s['active']}")
-        lines.append(f"  ❌ Завершено/отменено: {s['cancelled']}")
-        if s['skipped']:
-            lines.append(f"  ⏭ Пропущено >1 млрд: {s['skipped']}")
-        lines.append("")
-
-    if total_new > 0:
-        lines.append("📋 Новые лоты добавлены в Google Sheets (выделены зелёным)")
-    else:
-        lines.append("📋 Новых лотов сегодня нет")
-
-    send_telegram("\n".join(lines))
-    print(f"\n  ✅ Готово. Новых: {total_new}. Сводка отправлена.")
+    print(f"\n  ✅ Готово. Новых лотов: {total_new}.")
 
 
 # ──────────────────────────────────────────────

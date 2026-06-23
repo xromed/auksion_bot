@@ -30,8 +30,6 @@ jobs:
 
       - name: Запустить бота (один раз, без планировщика)
         env:
-          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GOOGLE_CREDS_FILE: google_creds.json
         run: python bot.py --no-schedule
 
