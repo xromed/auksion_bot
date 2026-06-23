@@ -284,6 +284,13 @@ def lot_url(lot_id) -> str:
 def get_status(status_id) -> str:
     return STATUS.get(int(status_id) if status_id else 0, f"Статус {status_id}")
 
+def safe_int(val, default=0) -> int:
+    """Конвертирует значение в int, убирая '+'  и другие символы (напр. '1+' → 1)."""
+    try:
+        return int(re.sub(r'[^\d]', '', str(val or default)) or default)
+    except:
+        return default
+
 def is_closed_status(status_id) -> bool:
     return int(status_id or 0) in CLOSED_STATUSES
 
@@ -548,8 +555,8 @@ def update_statuses_in_sheet(ws, lots: list, existing: dict, usd_rate: float):
                 })
 
         add(status_col,    new_status)
-        add(orders_col,    str(lot.get("user_order_cnt", "0")))
-        add(views_col,     str(lot.get("view_count", "0")))
+        add(orders_col,    str(safe_int(lot.get("user_order_cnt", 0))))
+        add(views_col,     str(safe_int(lot.get("view_count", 0))))
         add(price_col,     format_price(sp))
         add(price_usd_col, to_usd(sp, usd_rate))
         add(date_col,      lot.get("auction_date_str", ""))
@@ -704,8 +711,8 @@ def build_lot_dict(group_id: int, lot: dict, usd_rate: float, coords: dict,
         "deposit_pct":      str(lot.get("zaklad_percent", "")),
         "auction_date":     lot.get("auction_date_str", ""),
         "deadline":         lot.get("order_end_time_str", ""),
-        "orders":           int(lot.get("user_order_cnt", 0) or 0),
-        "views":            int(lot.get("view_count", 0) or 0),
+        "orders":           safe_int(lot.get("user_order_cnt", 0)),
+        "views":            safe_int(lot.get("view_count", 0)),
         "url":              lot_url(lot_id),
         "added_date":       added_date,
         "is_duplicate":     is_duplicate,
