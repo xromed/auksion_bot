@@ -16,6 +16,9 @@ from google.oauth2.service_account import Credentials
 #  НАСТРОЙКИ
 # ============================================================
 GOOGLE_CREDS_FILE = os.environ.get("GOOGLE_CREDS_FILE", "google_creds.json")
+
+# В GitHub Actions (CI=true) пропускаем запрос координат — слишком долго для 1000+ лотов
+SKIP_COORDS = os.environ.get("CI", "").lower() == "true"
 GOOGLE_SHEET_NAME = "E-Auksion Лоты"
 REPORT_TIME       = "10:00"
 MAX_PRICE         = 1_000_000_000
@@ -794,9 +797,11 @@ def check_and_notify():
             if str(lot.get("id", "")) in new_lot_ids_raw
             and is_closed_status(lot.get("lot_statuses_id", 0))
         }
-        if new_lot_ids_raw:
+        if new_lot_ids_raw and not SKIP_COORDS:
             coords_map = fetch_coords_bulk(new_lot_ids_raw, skip_if_cancelled=closed_new)
         else:
+            if SKIP_COORDS and new_lot_ids_raw:
+                print(f"  ⏭ CI режим: координаты пропускаем ({len(new_lot_ids_raw)} лотов)")
             coords_map = {}
 
         # Обновляем существующие лоты в Sheets
