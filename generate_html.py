@@ -54,8 +54,9 @@ def build_history_json_for_js(history: dict) -> str:
 
 def generate_index(lots: dict, usd_rate: float, updated_at: str):
     """Генерирует docs/index.html."""
-    lots_js   = build_lots_json_for_js(lots)
-    updated   = fmt_updated(updated_at)
+    lots_js    = build_lots_json_for_js(lots)
+    history_js = build_history_json_for_js(load_history())
+    updated    = fmt_updated(updated_at)
     usd_str   = f"{usd_rate:,.0f}".replace(",", " ") if usd_rate else "—"
 
     # Считаем статистику
@@ -492,10 +493,6 @@ renderTable(15);
 </script>
 </body>
 </html>"""
-
-    # Подставляем данные
-    html = html.replace("{lots_js}", lots_js)
-    html = html.replace("{history_js}", build_history_json_for_js(load_history()))
 
     DOCS_DIR.mkdir(exist_ok=True)
     (DOCS_DIR / "index.html").write_text(html, "utf-8")
