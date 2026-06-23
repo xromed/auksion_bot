@@ -25,7 +25,6 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Записать Google credentials
-        if: ${{ secrets.GOOGLE_CREDS_JSON != '' }}
         run: echo '${{ secrets.GOOGLE_CREDS_JSON }}' > google_creds.json
 
       - name: Запустить бота (один раз, без планировщика)
