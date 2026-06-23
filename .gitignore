@@ -1,0 +1,6 @@
+google_creds.json
+seen_lots.json
+__pycache__/
+*.pyc
+.env
+*.log
