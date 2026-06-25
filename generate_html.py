@@ -224,10 +224,9 @@ tr.row-duplicate td:first-child::before {{ content: "↩ "; color: #f57f17; }}
   <div class="table-wrap"><table id="table-1">
     <thead><tr>
       <th>ID</th><th>Тип</th><th>Название</th><th>Адрес</th>
-      <th>Статус</th><th>Тип аукц.</th>
-      <th onclick="toggleSort(1,'price')" style="cursor:pointer">Нач. цена (сум)</th>
-      <th>Нач. ($)</th><th>Оцен. (сум)</th>
-      <th>Дата аукц.</th><th>Дедлайн</th>
+      <th>Статус</th>
+      <th>Нач. цена (сум)</th><th>Нач. ($)</th>
+      <th>Добавлен</th><th>Дедлайн</th>
       <th>Заявки</th><th>Карта</th>
     </tr></thead>
     <tbody id="tbody-1"></tbody>
@@ -252,7 +251,7 @@ tr.row-duplicate td:first-child::before {{ content: "↩ "; color: #f57f17; }}
   <div class="table-wrap"><table id="table-2">
     <thead><tr>
       <th>ID</th><th>Марка</th><th>Название</th><th>Адрес</th>
-      <th>Статус</th><th>Тип аукц.</th>
+      <th>Статус</th>
       <th>Нач. цена (сум)</th><th>Нач. ($)</th>
       <th>Добавлен</th><th>Дедлайн</th>
       <th>Заявки</th><th>Карта</th>
@@ -279,7 +278,7 @@ tr.row-duplicate td:first-child::before {{ content: "↩ "; color: #f57f17; }}
   <div class="table-wrap"><table id="table-15">
     <thead><tr>
       <th>ID</th><th>Тип</th><th>Название</th><th>Адрес</th>
-      <th>Статус</th><th>Тип аукц.</th>
+      <th>Статус</th>
       <th>Нач. цена (сум)</th><th>Нач. ($)</th>
       <th>Добавлен</th><th>Дедлайн</th>
       <th>Заявки</th><th>Карта</th>
@@ -372,21 +371,17 @@ function renderTable(gid) {{
     const mapCell = l.map_url
       ? `<a href="${{l.map_url}}" target="_blank">📍</a>`
       : '—';
-    const atype = l.auction_type || '';
-    const atypeHtml = atype.includes('Пониж')
-      ? `<span class="down">${{atype}}</span>`
-      : `<span class="up">${{atype}}</span>`;
+    const deadline = (l.deadline || '').split(' ')[0];  // убираем время
     return `<tr class="${{trClass}}">
       <td><a href="${{l.url}}" target="_blank">${{l.id}}</a></td>
       <td>${{l.display_type || '—'}}</td>
       <td style="max-width:220px;word-break:break-word">${{l.name || '—'}}</td>
       <td style="max-width:180px;font-size:12px;color:#546e7a">${{l.address || '—'}}</td>
       <td>${{statusBadge(l)}}</td>
-      <td style="font-size:12px">${{atypeHtml}}</td>
       <td style="text-align:right;font-weight:600">${{l.start_price_fmt || '—'}}</td>
       <td style="text-align:right;color:#1565C0">${{l.start_price_usd || '—'}}</td>
       <td style="white-space:nowrap;font-size:12px;color:#546e7a">${{l.added_date || '—'}}</td>
-      <td style="white-space:nowrap;font-size:12px">${{l.deadline || '—'}}</td>
+      <td style="white-space:nowrap;font-size:12px">${{deadline || '—'}}</td>
       <td style="text-align:center">${{l.orders ?? '—'}}</td>
       <td style="text-align:center">${{mapCell}}</td>
     </tr>`;

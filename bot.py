@@ -22,6 +22,7 @@ SKIP_COORDS = os.environ.get("CI", "").lower() == "true"
 GOOGLE_SHEET_NAME = "E-Auksion Лоты"
 REPORT_TIME       = "10:00"
 MAX_PRICE         = 1_000_000_000
+MIN_LOT_ID        = 1_000_000  # лоты с меньшим ID — устаревшие, некорректно отображаются на сайте
 # ============================================================
 
 DATA_DIR     = Path("data")
@@ -827,11 +828,12 @@ def check_and_notify():
             elif status_id in CLOSED_STATUSES:
                 cancelled_count += 1
 
-            if price > MAX_PRICE:
+            if price > MAX_PRICE or int(lot_id or 0) < MIN_LOT_ID:
                 skipped += 1
                 continue
-            if group_id == 15 and cat_id not in BANKRUPTCY_ALLOWED_CATEGORIES:
-                continue
+            # category_id в API для банкротства часто null — не фильтруем
+            # if group_id == 15 and cat_id not in BANKRUPTCY_ALLOWED_CATEGORIES:
+            #     continue
 
             # Обновляем статус в JSON хранилище если лот уже есть
             if lot_id in stored_lots:
