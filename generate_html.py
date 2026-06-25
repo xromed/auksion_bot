@@ -320,6 +320,13 @@ function switchTab(name, el) {{
 // ─── Рендер таблиц ──────────────────────────────
 const sortState = {{}};
 
+function fmtUsd(val) {{
+  if (!val && val !== 0) return '—';
+  const num = parseInt(String(val).replace(/[^\d]/g, ''));
+  if (isNaN(num) || num === 0) return '—';
+  return '$ ' + num.toLocaleString('ru-RU');
+}}
+
 function statusBadge(lot) {{
   const s = lot.status || '';
   const closed = ['Завершён','Отменён'].includes(s);
@@ -379,7 +386,7 @@ function renderTable(gid) {{
       <td style="max-width:180px;font-size:12px;color:#546e7a">${{l.address || '—'}}</td>
       <td>${{statusBadge(l)}}</td>
       <td style="text-align:right;font-weight:600">${{l.start_price_fmt || '—'}}</td>
-      <td style="text-align:right;color:#1565C0">${{l.start_price_usd || '—'}}</td>
+      <td style="text-align:right;color:#1565C0">${{fmtUsd(l.start_price_usd)}}</td>
       <td style="white-space:nowrap;font-size:12px;color:#546e7a">${{l.added_date || '—'}}</td>
       <td style="white-space:nowrap;font-size:12px">${{deadline || '—'}}</td>
       <td style="text-align:center">${{l.orders ?? '—'}}</td>
