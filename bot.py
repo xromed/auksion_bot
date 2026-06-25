@@ -838,8 +838,8 @@ def check_and_notify():
                 stored_lots[lot_id]["status"]    = get_status(status_id)
                 stored_lots[lot_id]["status_id"] = status_id
                 stored_lots[lot_id]["is_closed"] = is_closed_status(status_id)
-                stored_lots[lot_id]["orders"]    = int(lot.get("user_order_cnt", 0) or 0)
-                stored_lots[lot_id]["views"]     = int(lot.get("view_count", 0) or 0)
+                stored_lots[lot_id]["orders"]    = safe_int(lot.get("user_order_cnt", 0))
+                stored_lots[lot_id]["views"]     = safe_int(lot.get("view_count", 0))
                 stored_lots[lot_id]["auction_date"] = lot.get("auction_date_str", "")
                 stored_lots[lot_id]["deadline"]     = lot.get("order_end_time_str", "")
                 stored_lots[lot_id]["is_duplicate"] = is_duplicate.get(lot_id, False)
