@@ -253,8 +253,8 @@ tr.row-duplicate td:first-child::before {{ content: "↩ "; color: #f57f17; }}
     <thead><tr>
       <th>ID</th><th>Марка</th><th>Название</th><th>Адрес</th>
       <th>Статус</th><th>Тип аукц.</th>
-      <th>Нач. цена (сум)</th><th>Нач. ($)</th><th>Оцен. (сум)</th>
-      <th>Дата аукц.</th><th>Дедлайн</th>
+      <th>Нач. цена (сум)</th><th>Нач. ($)</th>
+      <th>Добавлен</th><th>Дедлайн</th>
       <th>Заявки</th><th>Карта</th>
     </tr></thead>
     <tbody id="tbody-2"></tbody>
@@ -280,8 +280,8 @@ tr.row-duplicate td:first-child::before {{ content: "↩ "; color: #f57f17; }}
     <thead><tr>
       <th>ID</th><th>Тип</th><th>Название</th><th>Адрес</th>
       <th>Статус</th><th>Тип аукц.</th>
-      <th>Нач. цена (сум)</th><th>Нач. ($)</th><th>Оцен. (сум)</th>
-      <th>Дата аукц.</th><th>Дедлайн</th>
+      <th>Нач. цена (сум)</th><th>Нач. ($)</th>
+      <th>Добавлен</th><th>Дедлайн</th>
       <th>Заявки</th><th>Карта</th>
     </tr></thead>
     <tbody id="tbody-15"></tbody>
@@ -384,9 +384,8 @@ function renderTable(gid) {{
       <td>${{statusBadge(l)}}</td>
       <td style="font-size:12px">${{atypeHtml}}</td>
       <td style="text-align:right;font-weight:600">${{l.start_price_fmt || '—'}}</td>
-      <td style="text-align:right;color:#546e7a">${{l.start_price_usd || '—'}}</td>
-      <td style="text-align:right;color:#546e7a">${{l.eval_price_fmt || '—'}}</td>
-      <td style="white-space:nowrap;font-size:12px">${{l.auction_date || '—'}}</td>
+      <td style="text-align:right;color:#1565C0">${{l.start_price_usd || '—'}}</td>
+      <td style="white-space:nowrap;font-size:12px;color:#546e7a">${{l.added_date || '—'}}</td>
       <td style="white-space:nowrap;font-size:12px">${{l.deadline || '—'}}</td>
       <td style="text-align:center">${{l.orders ?? '—'}}</td>
       <td style="text-align:center">${{mapCell}}</td>
