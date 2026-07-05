@@ -65,6 +65,12 @@
       "auto": 1075,
       "bankruptcy": 0,
       "total": 1115
+    },
+    "2026-07-05": {
+      "realty": 40,
+      "auto": 1075,
+      "bankruptcy": 96,
+      "total": 1211
     }
   }
 }
